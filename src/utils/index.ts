@@ -4,3 +4,4 @@ export * from './dbquery';
 export * from './async';
 export * from './casino';
 export * from './validation';
+export * from './oauth';

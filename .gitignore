@@ -4,6 +4,7 @@
 /node_modules
 /simple-server
 .env
+myrsa.key
 
 # production
 
