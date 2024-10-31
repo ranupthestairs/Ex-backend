@@ -19,15 +19,9 @@
         "noImplicitThis": false,
         "strictNullChecks": false,
         "outDir": "./build",
-        "baseUrl": ".",
+        "baseUrl": "./",
         "paths": {
-            // "@server/*": ["src/*"],
-            // "@config/*": ["src/config/*"],
-            // "@model/*": ["src/model/*"],
-            // "@interface/*": ["src/interface/*"],
-            // "@utils/*": ["src/utils/*"],
-            // "@routes/*": ["src/routes/*"],
-            // "@controller/*": ["src/controller/*"]
+            "src/*": ["src/*"]
         }
     },
     "include": ["src/**/*", "index.ts", "store.ts"],
