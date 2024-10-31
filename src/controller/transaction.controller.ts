@@ -88,9 +88,9 @@ export const getFiatToCryptoEstimate = async (
 }
 
 export const getCryptoToFiatEstimate = async (
-    req: Request,
-    res: Response,
-    next: NextFunction,    
+    _req: Request,
+    _res: Response,
+    _next: NextFunction,    
 ) => {
 
 }
