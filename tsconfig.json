@@ -24,6 +24,6 @@
             "src/*": ["src/*"]
         }
     },
-    "include": ["src/**/*", "api/index.ts", "store.ts"],
+    "include": ["src/**/*", "index.ts", "store.ts"],
     "exclude": ["node_modules"]
 }
