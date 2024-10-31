@@ -87,11 +87,11 @@ export const getFiatToCryptoEstimate = async (
     }
 }
 
-// export const getCryptoToFiatEstimate = async (
-//     req: Request,
-//     res: Response,
-//     next: NextFunction,    
-// ) => {
+export const getCryptoToFiatEstimate = async (
+    _req: Request,
+    _res: Response,
+    _next: NextFunction,    
+) => {
 
 // }
 
