@@ -1,10 +1,10 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import { app } from './src/config/express';
+import { app } from '../src/config/express';
 
 dotenv.config();
 const port = process.env.PORT || '3000';
-const mongooseURL = process.env.MONGODB_URL || '';
+const mongooseURL = process.env.MONGODB_URL;
 
 mongoose
     .connect(mongooseURL)

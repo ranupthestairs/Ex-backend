@@ -1,7 +1,7 @@
 import Axios from 'axios';
 import { NextFunction, Request, Response } from 'express';
-import { generateAuthHeader } from '../utils';
 import { CONSUMER_KEY, PARTNER_ID, SIGNING_KEY } from '../constants';
+import { generateAuthHeader } from '../utils';
 
 export const createTransaction = async (
     req: Request,
