@@ -87,13 +87,13 @@ export const getFiatToCryptoEstimate = async (
     }
 }
 
-export const getCryptoToFiatEstimate = async (
-    req: Request,
-    res: Response,
-    next: NextFunction,    
-) => {
+// export const getCryptoToFiatEstimate = async (
+//     req: Request,
+//     res: Response,
+//     next: NextFunction,    
+// ) => {
 
-}
+// }
 
 export const getTransactionStatusById = async (
     req: Request,

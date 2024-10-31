@@ -1,18 +1,19 @@
 import { NextFunction, Request, Response } from "express";
 import Axios from "axios";
-import { CONSUMER_KEY, PARTNER_ID } from '../constants';
-import { generateAuthHeader } from "src/utils";
-import fs from 'fs';
+import { CONSUMER_KEY, PARTNER_ID, SIGNING_KEY } from '../constants';
+import { generateAuthHeader } from "../utils";
 
 export const createTransaction = async (
     req: Request,
     res: Response,
     next: NextFunction,
 ) => {
+
     const data = req.body;
+    console.log('-----body \n', data);
     const url = `https://sandbox.api.mastercard.com/send/static/v1/partners/${PARTNER_ID}/transfers/payment`;
-    const signingKey = fs.readFileSync('../../myrsa.key');
-    const authHeader = generateAuthHeader(url, 'POST', JSON.stringify(data), CONSUMER_KEY, signingKey);
+    const authHeader = generateAuthHeader(url, 'POST', JSON.stringify(data), CONSUMER_KEY, SIGNING_KEY);
+    console.log('-----generate authHeader');
     try {
         Axios.post(url, data, {
             headers: {
@@ -21,8 +22,7 @@ export const createTransaction = async (
         }).then((response) => {
                 // validate the data
                 res.status(200).send(response.data);
-            })
-            .catch((error) => {
+            }).catch((error) => {
                 console.log('createTransaction Error:', error.message);
                 res.status(500).send({
                     message: 'Error',
@@ -41,8 +41,7 @@ export const getTransactionStatusById = async (
 ) => {
     const { id } = req.params;
     const url = `https://sandbox.api.mastercard.com/send/static/v1/partners/${PARTNER_ID}/transfers/${id}`;
-    const signingKey = fs.readFileSync('../../myrsa.key');
-    const authHeader = generateAuthHeader(url, 'GET', '', CONSUMER_KEY, signingKey);
+    const authHeader = generateAuthHeader(url, 'GET', '', CONSUMER_KEY, SIGNING_KEY);
 
     if (!id) return res.status(400).send({ message: 'Invalid parameter' });
     try {
