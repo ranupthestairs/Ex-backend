@@ -1,20 +1,19 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../constants';
 
-export const authenticateToken(
+export const authenticateToken = async (
     req: Request,
     res: Response,
-    next: NextFunction
-){
-    const userData = req.body;
+    next: Function,
+) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
     if(token == null) return res.sendStatus(401);
 
-    jwt.verify(token, JWT_SECRET, (err, user) => {
+    jwt.verify(token, JWT_SECRET, (err, email) => {
         if (err) return res.sendStatus(403);
-        userData.email = user;
+        req.body.email = email;
         next();
     });
 
