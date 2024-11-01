@@ -1,20 +1,18 @@
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
 import User from '../models/user.model';
 import VerificationCode from '../models/verificationCode.model';
 import { sendmail } from '../utils';
-import jwt from 'jsonwebtoken';
-import { JWT_SECRET } from '../constants';
-
+import { JWT_SECRET, JWT_EXPIRATION_TIME } from '../constants';
 
 export const signup = async (
     req: Request,
     res: Response,
-    Next: NextFunction
 ) => {
     try{
-        const { firstName, lastName, email, password} = await req.body();
+        const profile = req.body;
 
-        const existAccount = await User.findOne({ email });
+        const existAccount = await User.findOne({ email: profile.email });
         if (existAccount) {
             return res.status(422).send({
                 message: "Email already in use",
@@ -22,10 +20,10 @@ export const signup = async (
         }
 
         const newUser = await User.create({
-            firstName: firstName,
-            lastName, lastName,
-            email, email,
-            password, password,
+            firstName: profile.firstName,
+            lastName: profile.lastName,
+            email: profile.email,
+            password: profile.password,
         });
 
         const code = Math.floor(10000 + Math.random() * 90000);
@@ -37,16 +35,17 @@ export const signup = async (
         });
 
         await sendmail(
-            email,
+            profile.email,
             "CONFIRM_EMAIL",
-            { name: firstName, code: code.toString()},
+            { name: profile.firstName, code: code.toString()},
             "NOTIFICATION"
         )
+        
+        return res.status(200).send({ message: "Account created successfully" });
+
     } catch (err) {
-        console.log(err);
-        return res.status(500).send({
-            message: "Internal Server Error",
-        });
+        console.log('---- auth controller signup error: ', err);
+        return res.status(500).send({ message: "Internal Server Error" });
     }
 
 }
@@ -54,10 +53,9 @@ export const signup = async (
 export const login = async (
     req: Request,
     res: Response,
-    Next: NextFunction
 ) => {
-    const { email, password } = await req.body();
-    const user = await User.findOne({ email });
+    const profile = req.body;
+    const user = await User.findOne({ email: profile.email });
     if (!user) {
         return res.status(404).send({
             message: "User not found",
@@ -65,8 +63,8 @@ export const login = async (
     }
 
     try{
-        if (user.password == password) {
-            const token = jwt.sign({ email: email }, JWT_SECRET, { expiresIn: '24h' });
+        if (user.password == profile.password) {
+            const token = jwt.sign({ email: profile.email }, JWT_SECRET, { expiresIn: JWT_EXPIRATION_TIME });
             return res.status(200).send({
                 message: "Login successful",
                 token: token,
@@ -77,10 +75,8 @@ export const login = async (
             });
         }
     } catch(error) {
-        console.log(error);
-        return res.status(500).send({
-            message: "Internal Server Error",
-        });
+        console.log('---- auth controller login error: ', error);
+        return res.status(500).send({ message: "Internal Server Error" });
     }
 
 }
