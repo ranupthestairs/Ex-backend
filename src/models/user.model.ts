@@ -33,10 +33,7 @@ const UserSchema = new Schema(
             country: String,
         },
 
-        funding: {
-            source: String,
-            uri: String,
-        },
+        debitUri: String,
 
         password: String,
     },        

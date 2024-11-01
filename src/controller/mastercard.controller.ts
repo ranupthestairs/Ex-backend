@@ -10,7 +10,7 @@ export const createTransaction = async (
 ) => {
 
     const data = req.body;
-    console.log('-----body \n', data);
+    // console.log('-----body \n', data);
     const url = `https://sandbox.api.mastercard.com/send/static/v1/partners/${PARTNER_ID}/transfers/payment`;
     const authHeader = generateAuthHeader(
         url,
