@@ -39,13 +39,16 @@
         "btoa": "^1.2.1",
         "cors": "^2.8.5",
         "dotenv": "^16.0.3",
+        "ejs": "^3.1.10",
         "express": "^4.18.2",
         "fs": "^0.0.1-security",
+        "jsonwebtoken": "^9.0.2",
         "juno-network": "^0.15.0",
         "mastercard-oauth1-signer": "^1.1.7",
         "module-alias": "^2.2.2",
         "mongoose": "^7.0.4",
         "morgan": "^1.10.0",
+        "nodemailer": "^6.9.16",
         "request": "^2.88.2",
         "request-promise": "^0.0.1"
     }
