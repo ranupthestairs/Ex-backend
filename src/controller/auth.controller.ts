@@ -69,6 +69,7 @@ export const login = async (
             return res.status(200).send({
                 message: "Login successful",
                 token: token,
+                user: user,
             });
         } else {
             return res.status(401).send({

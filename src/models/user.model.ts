@@ -23,17 +23,7 @@ const UserSchema = new Schema(
           default: false,
         },
     
-        accountType: String,
-        address: {
-            line1: String,
-            line2: String,
-            city: String,
-            countrySubdivision: String,
-            postalCode: String,
-            country: String,
-        },
-
-        debitUri: String,
+        billingInfo: Schema.Types.Mixed,
 
         password: String,
     },        
