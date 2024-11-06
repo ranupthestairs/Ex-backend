@@ -5,8 +5,12 @@ import { generateAuthHeader } from '../utils';
 import User from '../models/user.model';
 import Transaction from '../models/transaction.model';
 
+interface CustomRequest extends Request {
+    email: string;
+}
+
 export const createTransaction = async (
-    req: Request,
+    req: CustomRequest,
     res: Response,
     next: NextFunction,
 ) => {
@@ -24,41 +28,33 @@ export const createTransaction = async (
     try {
         // add billing info
         
-        Axios.post(url, data, {
+        const response = await Axios.post(url, data, {
             headers: {
                 Authorization: authHeader,
             },
-        })
-            .then((response) => {
-                // validate the data
-                Transaction.create({
-                    from: req.body.email,
-                    payment_transfer: req.body.payment_transfer,
-                })
+        });
 
-                User.findOneAndUpdate(
-                    { email: req.body.email },
-                    { 
-                        $set: {
-                            billingInfo: {
-                                accountType: req.body.payment_transfer.sender.account_type,
-                                address: req.body.payment_transfer.sender.address,
-                                debitUri: req.body.payment_transfer.sender_account_uri,
-                            },
-                        }
+        await Transaction.create({
+            from: req.email,
+            payment_transfer: req.body.payment_transfer,
+        });
+
+        await User.findOneAndUpdate(
+            { email: req.email },
+            { 
+                $set: {
+                    billingInfo: {
+                        accountType: req.body.payment_transfer.sender.account_type,
+                        address: req.body.payment_transfer.sender.address,
+                        debitUri: req.body.payment_transfer.sender_account_uri,
                     },
-                    { upsert: true },
-                ).then(() => {
-                    res.status(200).send(response.data);
-                });
+                }
+            },
+            { upsert: true },
+        );
 
-            }).catch((error) => {
-                console.log('createTransaction Error:', error.message);
-                res.status(500).send({
-                    message: 'Error',
-                    error: error.message,
-                });
-            });
+        return res.status(200).send(response.data);
+        
     } catch (err) {
         return next(err);
     }
@@ -81,20 +77,12 @@ export const getTransactionStatusById = async (
 
     if (!id) return res.status(400).send({ message: 'Invalid parameter' });
     try {
-        Axios.get(url, {
+        const response = await Axios.get(url, {
             headers: {
                 Authorization: authHeader,
             },
-        })
-            .then((response) => {
-                res.status(200).send(response.data);
-            })
-            .catch((error) => {
-                res.status(500).send({
-                    message: 'Error',
-                    error: error.message,
-                });
-            });
+        });
+        res.status(200).send(response.data);
     } catch (err) {
         return next(err);
     }
