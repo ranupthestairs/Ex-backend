@@ -2,8 +2,12 @@ import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../constants';
 
+interface CustomRequest extends Request{
+    email: String;
+}
+
 export const authenticateToken = async (
-    req: Request,
+    req: CustomRequest,
     res: Response,
     next: Function,
 ) => {
@@ -13,9 +17,12 @@ export const authenticateToken = async (
     // if(token == null) return res.sendStatus(401);
     if(authHeader == null) return res.sendStatus(401);
 
-    const result = jwt.verify(authHeader, JWT_SECRET);
-    req.body.email = result.email;
-    console.log(result);
-    next();
-    return '0';
+    try{
+        const result = jwt.verify(authHeader, JWT_SECRET);
+        req.email = result.email;
+        console.log(result);
+        return next();
+    } catch(error){
+        return res.status(401).send({ message: "Invalid token" });
+    }
 }

@@ -11,7 +11,8 @@ const routes = Router();
 
 routes.use('/auth', authRoutes);
 routes.use('/transaction', authenticateToken, transactionRoutes);
-routes.use('/mastercard', authenticateToken, mastercardRoutes);
+routes.use('/mastercard', mastercardRoutes);
+// routes.use('/mastercard', authenticateToken, mastercardRoutes);
 routes.use('/billinginfo', authenticateToken, billinginfoRoutes);
 
 export { routes };
