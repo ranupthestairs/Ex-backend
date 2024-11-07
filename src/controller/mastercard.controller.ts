@@ -34,26 +34,30 @@ export const createTransaction = async (
             },
         });
 
-        await Transaction.create({
-            from: req.email,
-            payment_transfer: req.body.payment_transfer,
-        });
+        try{
+            await Transaction.create({
+                from: req.email,
+                payment_transfer: req.body.payment_transfer,
+            });
 
-        await User.findOneAndUpdate(
-            { email: req.email },
-            { 
-                $set: {
-                    billingInfo: {
-                        accountType: req.body.payment_transfer.sender.account_type,
-                        address: req.body.payment_transfer.sender.address,
-                        debitUri: req.body.payment_transfer.sender_account_uri,
-                    },
-                }
-            },
-            { upsert: true },
-        );
+            await User.findOneAndUpdate(
+                { email: req.email },
+                { 
+                    $set: {
+                        billingInfo: {
+                            accountType: req.body.payment_transfer.sender.account_type,
+                            address: req.body.payment_transfer.sender.address,
+                            debitUri: req.body.payment_transfer.sender_account_uri,
+                        },
+                    }
+                },
+                { upsert: true },
+            );
+        }catch(error){
+            console.log('----- transaction save error: ', error.message);
+        }
 
-        return res.status(200).send(response.data);
+        return res.status(response.status).send(response.data);
         
     } catch (err) {
         return next(err);
