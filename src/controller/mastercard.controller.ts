@@ -14,7 +14,6 @@ export const createTransaction = async (
     res: Response,
     next: NextFunction,
 ) => {
-
     const data = req.body;
     // console.log('-----body \n', data);
     const url = `https://sandbox.api.mastercard.com/send/static/v1/partners/${PARTNER_ID}/transfers/payment`;
@@ -27,38 +26,39 @@ export const createTransaction = async (
     );
     try {
         // add billing info
-        
+
         const response = await Axios.post(url, data, {
             headers: {
                 Authorization: authHeader,
             },
         });
 
-        try{
+        try {
             await Transaction.create({
                 from: req.email,
-                payment_transfer: req.body.payment_transfer,
+                transfer: response.data.transfer,
             });
 
             await User.findOneAndUpdate(
                 { email: req.email },
-                { 
+                {
                     $set: {
                         billingInfo: {
-                            accountType: req.body.payment_transfer.sender.account_type,
+                            accountType:
+                                req.body.payment_transfer.sender.account_type,
                             address: req.body.payment_transfer.sender.address,
-                            debitUri: req.body.payment_transfer.sender_account_uri,
+                            debitUri:
+                                req.body.payment_transfer.sender_account_uri,
                         },
-                    }
+                    },
                 },
                 { upsert: true },
             );
-        }catch(error){
+        } catch (error) {
             console.log('----- transaction save error: ', error.message);
         }
 
         return res.status(response.status).send(response.data);
-        
     } catch (err) {
         return next(err);
     }

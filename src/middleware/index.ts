@@ -6,7 +6,7 @@ interface CustomRequest extends Request {
     email: String;
 }
 
-export const authenticateToken = async (
+export const requireAuth = async (
     req: CustomRequest,
     res: Response,
     next: Function,
