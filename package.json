@@ -7,8 +7,8 @@
         "build": "tsc",
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "ts-node -r tsconfig-paths/register index",
-        "start-5000": "PORT=5000 ts-node -r tsconfig-paths/register index",
-        "dev": "nodemon --watch \"src/**\" --ext \"ts,json\" --ignore \"src/**/*.spec.ts\" --exec \"ts-node index.ts\""
+        "start-5000": "set PORT=5000 && ts-node -r tsconfig-paths/register index",
+        "dev": "set PORT=5000 && nodemon --watch \"src/**\" --ext \"ts,json\" --ignore \"src/**/*.spec.ts\" --exec \"ts-node index.ts\""
     },
     "author": "",
     "license": "ISC",
