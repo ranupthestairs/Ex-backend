@@ -5,7 +5,11 @@ import User from '../models/user.model';
 // import { sendmail } from '../utils';
 import { JWT_SECRET, JWT_EXPIRATION_TIME } from '../constants';
 
-export const signup = async (req: Request, res: Response) => {
+type CustomRequest = {
+    isFollowedLogin?: boolean;
+} & Request;
+
+export const signup = async (req: CustomRequest, res: Response) => {
     try {
         const profile = req.body;
 
@@ -17,12 +21,7 @@ export const signup = async (req: Request, res: Response) => {
         }
 
         // const newUser =
-        await User.create({
-            firstName: profile.firstName,
-            lastName: profile.lastName,
-            email: profile.email,
-            password: profile.password,
-        });
+        const newUser = await User.create(profile);
 
         // const code = Math.floor(10000 + Math.random() * 90000);
 
@@ -39,37 +38,37 @@ export const signup = async (req: Request, res: Response) => {
         //     "NOTIFICATION"
         // )
 
+        if (req.isFollowedLogin) {
+            return newUser;
+        }
         return res
             .status(200)
             .send({ message: 'Account created successfully' });
     } catch (err) {
         console.log('---- auth controller signup error: ', err);
+        if (req.isFollowedLogin) throw new Error(err);
         return res.status(500).send({ message: 'Internal Server Error' });
     }
 };
 
-export const login = async (req: Request, res: Response) => {
+export const login = async (req: CustomRequest, res: Response) => {
     const profile = req.body;
     const user = await User.findOne({ email: profile.email });
-    if (!user) {
-        return await signup(req, res);
-    }
 
     try {
-        if (user.password == profile.password) {
-            const token = jwt.sign({ email: profile.email }, JWT_SECRET, {
-                expiresIn: JWT_EXPIRATION_TIME,
-            });
-            return res.status(200).send({
-                message: 'Login successful',
-                token: token,
-                user: user,
-            });
-        } else {
-            return res.status(401).send({
-                message: 'Invalid password',
-            });
+        if (!user) {
+            req.isFollowedLogin = true;
+            await signup(req, res);
         }
+
+        const token = jwt.sign({ email: profile.email }, JWT_SECRET, {
+            expiresIn: JWT_EXPIRATION_TIME,
+        });
+        return res.status(200).send({
+            message: 'Login successful',
+            token: `Bearer ${token}`,
+            user: user,
+        });
     } catch (error) {
         console.log('---- auth controller login error: ', error);
         return res.status(500).send({ message: 'Internal Server Error' });
