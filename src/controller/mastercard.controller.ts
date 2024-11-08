@@ -1,6 +1,6 @@
 import Axios from 'axios';
 import { NextFunction, Request, Response } from 'express';
-import { CONSUMER_KEY, PARTNER_ID, SIGNING_KEY } from '../constants';
+import { CONSUMER_KEY, PARTNER_ID, SIGNING_KEY, MASTERCARD_BASEURL } from '../constants';
 import { generateAuthHeader } from '../utils';
 import User from '../models/user.model';
 import Transaction from '../models/transaction.model';
@@ -16,7 +16,7 @@ export const createTransaction = async (
 ) => {
     const data = req.body;
     // console.log('-----body \n', data);
-    const url = `https://sandbox.api.mastercard.com/send/static/v1/partners/${PARTNER_ID}/transfers/payment`;
+    const url = MASTERCARD_BASEURL + PARTNER_ID + '/transfers/payment';
     const authHeader = generateAuthHeader(
         url,
         'POST',
@@ -70,7 +70,7 @@ export const getTransactionStatusById = async (
     next: NextFunction,
 ) => {
     const { id } = req.params;
-    const url = `https://sandbox.api.mastercard.com/send/static/v1/partners/${PARTNER_ID}/transfers/${id}`;
+    const url = MASTERCARD_BASEURL + PARTNER_ID + `/transfers/${id}`;
     const authHeader = generateAuthHeader(
         url,
         'GET',
@@ -91,3 +91,29 @@ export const getTransactionStatusById = async (
         return next(err);
     }
 };
+
+export const accountVerify = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+) => {
+    const data = req.body;
+    const url = MASTERCARD_BASEURL + PARTNER_ID + '/accounts/account-verification';
+    const authHeader = generateAuthHeader(
+        url,
+        'POST',
+        JSON.stringify(data),
+        CONSUMER_KEY,
+        SIGNING_KEY,
+    );
+    try {
+        const response = await Axios.post(url, data, {
+            headers: {
+                Authorization: authHeader,
+            },
+        });
+        res.status(response.status).send(response.data);
+    } catch (err) {
+        return next(err);
+    }
+}

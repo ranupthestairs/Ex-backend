@@ -6,5 +6,6 @@ const routes = Router();
 
 routes.post('/payment', requireAuth, mastercardController.createTransaction);
 routes.get('/status/:id', mastercardController.getTransactionStatusById);
+routes.post('/account-verification', mastercardController.accountVerify);
 
 export default routes;

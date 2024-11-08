@@ -7,3 +7,4 @@ export const SIGNING_KEY = Buffer.from(
     process.env.MASTERCARD_SIGNING_KEY.replace(/\\n/g, '\n'),
     'utf-8',
 );
+export const MASTERCARD_BASEURL = process.env.MASTERCARD_BASEURL;
