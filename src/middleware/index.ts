@@ -23,7 +23,6 @@ export const requireAuth = async (
             JWT_SECRET,
         );
         req.email = result.email;
-        console.log(result);
         return next();
     } catch (error) {
         return res.status(401).send({ message: 'Invalid token' });

@@ -1,6 +1,11 @@
 import Axios from 'axios';
 import { NextFunction, Request, Response } from 'express';
-import { CONSUMER_KEY, PARTNER_ID, SIGNING_KEY, MASTERCARD_BASEURL } from '../constants';
+import {
+    CONSUMER_KEY,
+    PARTNER_ID,
+    SIGNING_KEY,
+    MASTERCARD_BASEURL,
+} from '../constants';
 import { generateAuthHeader } from '../utils';
 import User from '../models/user.model';
 import Transaction from '../models/transaction.model';
@@ -39,16 +44,18 @@ export const createTransaction = async (
                 transfer: response.data.transfer,
             });
 
+            const { sender, sender_account_uri, funding_source } =
+                data.payment_transfer;
+
             await User.findOneAndUpdate(
                 { email: req.email },
                 {
                     $set: {
                         billingInfo: {
-                            accountType:
-                                req.body.payment_transfer.sender.account_type,
-                            address: req.body.payment_transfer.sender.address,
-                            debitUri:
-                                req.body.payment_transfer.sender_account_uri,
+                            accountType: sender.account_type,
+                            address: sender.address,
+                            debitUri: sender_account_uri,
+                            fundingSource: funding_source,
                         },
                     },
                 },
@@ -98,7 +105,8 @@ export const accountVerify = async (
     next: NextFunction,
 ) => {
     const data = req.body;
-    const url = MASTERCARD_BASEURL + PARTNER_ID + '/accounts/account-verification';
+    const url =
+        MASTERCARD_BASEURL + PARTNER_ID + '/accounts/account-verification';
     const authHeader = generateAuthHeader(
         url,
         'POST',
@@ -116,4 +124,4 @@ export const accountVerify = async (
     } catch (err) {
         return next(err);
     }
-}
+};
