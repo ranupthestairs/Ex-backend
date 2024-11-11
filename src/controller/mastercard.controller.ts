@@ -44,8 +44,13 @@ export const createTransaction = async (
                 transfer: response.data.transfer,
             });
 
-            const { sender, sender_account_uri, funding_source } =
-                data.payment_transfer;
+            const {
+                sender,
+                recipient,
+                sender_account_uri,
+                recipient_account_uri,
+                funding_source,
+            } = data.payment_transfer;
 
             await User.findOneAndUpdate(
                 { email: req.email },
@@ -56,6 +61,15 @@ export const createTransaction = async (
                             address: sender.address,
                             debitUri: sender_account_uri,
                             fundingSource: funding_source,
+                            firstName: sender.first_name,
+                            lastName: sender.last_name,
+                        },
+                        recipientInfo: {
+                            accountType: recipient.account_type,
+                            address: recipient.address,
+                            debitUri: recipient_account_uri,
+                            firstName: recipient.first_name,
+                            lastName: recipient.last_name,
                         },
                     },
                 },

@@ -27,6 +27,7 @@ const UserSchema = new Schema(
         },
 
         billingInfo: Schema.Types.Mixed,
+        recipientInfo: Schema.Types.Mixed,
 
         password: String,
     },
