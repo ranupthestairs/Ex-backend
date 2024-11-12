@@ -1,6 +1,7 @@
 import { Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { RequestWithAuth } from 'src/constants/interfaces';
+import User from '../models/user.model';
 import { JWT_SECRET } from '../constants';
 
 export const requireAuth = async (
@@ -19,8 +20,13 @@ export const requireAuth = async (
             authHeader.replace('Bearer ', ''),
             JWT_SECRET,
         );
-        req.email = result.email;
-        return next();
+        const user = await User.findOne({ email: result.email });
+        if (user) {
+            req.email = result.email;
+            req.sub = user.sub;
+            return next();
+        }
+        return res.status(401).send({ message: 'Invalid token' });
     } catch (error) {
         return res.status(401).send({ message: 'Invalid token' });
     }
