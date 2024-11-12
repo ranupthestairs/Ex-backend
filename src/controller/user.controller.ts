@@ -1,12 +1,9 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
+import { RequestWithAuth } from 'src/constants/interfaces';
 import Transaction from '../models/transaction.model';
 
-interface CustomRequest extends Request {
-    email: string;
-}
-
 export const getUserTransactions = async (
-    req: CustomRequest,
+    req: RequestWithAuth,
     res: Response,
 ) => {
     const { email } = req;

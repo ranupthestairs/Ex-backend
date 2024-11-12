@@ -1,13 +1,10 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import jwt from 'jsonwebtoken';
+import { RequestWithAuth } from 'src/constants/interfaces';
 import { JWT_SECRET } from '../constants';
 
-interface CustomRequest extends Request {
-    email: String;
-}
-
 export const requireAuth = async (
-    req: CustomRequest,
+    req: RequestWithAuth,
     res: Response,
     next: Function,
 ) => {

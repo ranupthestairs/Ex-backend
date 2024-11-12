@@ -9,13 +9,10 @@ import {
 import { generateAuthHeader } from '../utils';
 import User from '../models/user.model';
 import Transaction from '../models/transaction.model';
-
-interface CustomRequest extends Request {
-    email: string;
-}
+import { RequestWithAuth } from 'src/constants/interfaces';
 
 export const createTransaction = async (
-    req: CustomRequest,
+    req: RequestWithAuth,
     res: Response,
     next: NextFunction,
 ) => {

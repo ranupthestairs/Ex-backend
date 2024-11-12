@@ -1,15 +1,12 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import jwt from 'jsonwebtoken';
 import User from '../models/user.model';
 // import VerificationCode from '../models/verificationCode.model';
 // import { sendmail } from '../utils';
-import { JWT_SECRET, JWT_EXPIRATION_TIME } from '../constants';
+import { LoginRequest } from 'src/constants/interfaces';
+import { JWT_EXPIRATION_TIME, JWT_SECRET } from '../constants';
 
-type CustomRequest = {
-    isFollowedLogin?: boolean;
-} & Request;
-
-export const signup = async (req: CustomRequest, res: Response) => {
+export const signup = async (req: LoginRequest, res: Response) => {
     try {
         const profile = req.body;
 
@@ -51,7 +48,7 @@ export const signup = async (req: CustomRequest, res: Response) => {
     }
 };
 
-export const login = async (req: CustomRequest, res: Response) => {
+export const login = async (req: LoginRequest, res: Response) => {
     const profile = req.body;
     const user = await User.findOne({ email: profile.email });
 
