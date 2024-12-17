@@ -2,6 +2,7 @@ import { Router } from 'express';
 
 import transactionRoutes from './transaction.routes';
 import mastercardRoutes from './mastercard.routes';
+import visaRoutes from './visa.routes';
 import authRoutes from './auth.routes';
 import billinginfoRoutes from './billinginfo.routes';
 import userRoutes from './user.routes';
@@ -14,6 +15,7 @@ routes.use('/auth', authRoutes);
 routes.use('/transaction', requireAuth, transactionRoutes);
 routes.use('/mastercard', mastercardRoutes);
 // routes.use('/mastercard', requireAuth, mastercardRoutes);
+routes.use('/visa', visaRoutes);
 routes.use('/billinginfo', requireAuth, billinginfoRoutes);
 routes.use('/user', requireAuth, userRoutes);
 

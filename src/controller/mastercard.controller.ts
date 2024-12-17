@@ -6,10 +6,10 @@ import {
     SIGNING_KEY,
     MASTERCARD_BASEURL,
 } from '../constants';
-import { generateAuthHeader } from '../utils';
+import { generateMastercardAuthHeader } from '../utils';
 import User from '../models/user.model';
 import Transaction from '../models/transaction.model';
-import { RequestWithAuth } from 'src/constants/interfaces';
+import { RequestWithAuth } from '../constants';
 
 export const createTransaction = async (
     req: RequestWithAuth,
@@ -19,7 +19,7 @@ export const createTransaction = async (
     const data = req.body;
     // console.log('-----body \n', data);
     const url = MASTERCARD_BASEURL + PARTNER_ID + '/transfers/payment';
-    const authHeader = generateAuthHeader(
+    const authHeader = generateMastercardAuthHeader(
         url,
         'POST',
         JSON.stringify(data),
@@ -89,7 +89,7 @@ export const getTransactionStatusById = async (
 ) => {
     const { id } = req.params;
     const url = MASTERCARD_BASEURL + PARTNER_ID + `/transfers/${id}`;
-    const authHeader = generateAuthHeader(
+    const authHeader = generateMastercardAuthHeader(
         url,
         'GET',
         '',
@@ -118,7 +118,7 @@ export const accountVerify = async (
     const data = req.body;
     const url =
         MASTERCARD_BASEURL + PARTNER_ID + '/accounts/account-verification';
-    const authHeader = generateAuthHeader(
+    const authHeader = generateMastercardAuthHeader(
         url,
         'POST',
         JSON.stringify(data),

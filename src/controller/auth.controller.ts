@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import User from '../models/user.model';
 // import VerificationCode from '../models/verificationCode.model';
 // import { sendmail } from '../utils';
-import { LoginRequest } from 'src/constants/interfaces';
+import { LoginRequest } from '../constants';
 import { JWT_EXPIRATION_TIME, JWT_SECRET } from '../constants';
 
 export const signup = async (req: LoginRequest, res: Response) => {

@@ -1,6 +1,6 @@
 import { Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { RequestWithAuth } from 'src/constants/interfaces';
+import { RequestWithAuth } from '../constants';
 import User from '../models/user.model';
 import { JWT_SECRET } from '../constants';
 
