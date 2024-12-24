@@ -1,5 +1,5 @@
 import oauth from 'mastercard-oauth1-signer';
-import { VISA_API_KEY, VISA_SHARED_SECRET } from '../constants';
+// import { VISA_API_KEY, VISA_SHARED_SECRET } from '../constants';
 
 export const generateMastercardAuthHeader = (
     url: String, 
@@ -12,9 +12,9 @@ export const generateMastercardAuthHeader = (
     return authHeader;
 }
 
-export const generateVisaAuthHeader = () => ({
-    'Content-Type': 'application/json',
-    Authorization: `Basic ${Buffer.from(`${VISA_API_KEY}:${VISA_SHARED_SECRET}`).toString(
-        'base64',
-    )}`,
-});
+// export const generateVisaAuthHeader = () => ({
+//     'Content-Type': 'application/json',
+//     Authorization: `Basic ${Buffer.from(`${VISA_API_KEY}:${VISA_SHARED_SECRET}`).toString(
+//         'base64',
+//     )}`,
+// });

@@ -8,6 +8,7 @@ const allowedOrigins = ['http://localhost:3000', 'https://app.tahreef.com'];
 
 const corsOptions = {
     origin: (origin, callback) => {
+        console.log('debug origin', origin)
         // Allow requests with no origin, like mobile apps or CURL requests
         if (!origin || allowedOrigins.includes(origin)) {
             callback(null, true);

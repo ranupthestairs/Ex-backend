@@ -4,6 +4,7 @@ import * as visaController from '../controller/visa.controller';
 
 const routes = Router();
 
-routes.post('/payment',  visaController.createTransaction);
+routes.get('/helloworld', visaController.helloWorld);
+// routes.post('/payment',  visaController.createTransaction);
 
 export default routes;
