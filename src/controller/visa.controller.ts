@@ -28,26 +28,50 @@ export const helloWorld = async (
     }
 };
 
-// export const createTransaction = async (
-//     req: RequestWithAuth,
-//     res: Response,
-//     next: NextFunction,
-// ) => {
-//     const data = req.body;
+export const pullFundTransaction = async (
+    req: RequestWithAuth,
+    res: Response,
+    next: NextFunction,
+) => {
+    const data = req.body;
 
-//     const options = generateVisaAuthHeader('/vdp/helloworld');
+    const options = generateVisaAuthHeader('/visadirect/fundstransfer/v1/pullfundstransactions',data);
 
-//     console.log('debug here', data)
-//     try {
-//         request.get(options, (err, response, body) => {
-//             if (err) {
-//                 return console.log(err);
-//             }
-//             console.log(`Status: ${response.statusCode}`);
-//             console.log(body);
-//             return res.status(response.statusCode).send(body)
-//         });
-//     } catch (err) {
-//         return next(err)
-//     }
-// };
+    console.log('debug here', data)
+    try {
+        request.post(options, (err, response, body) => {
+            if (err) {
+                return console.log(err);
+            }
+            console.log(`Status: ${response.statusCode}`);
+            console.log(body);
+            return res.status(response.statusCode).send(body)
+        });
+    } catch (err) {
+        return next(err)
+    }
+};
+
+export const pushFundTransaction = async (
+    req: RequestWithAuth,
+    res: Response,
+    next: NextFunction,
+) => {
+    const data = req.body;
+
+    const options = generateVisaAuthHeader('/visadirect/fundstransfer/v1/pushfundstransactions',data);
+
+    console.log('debug here', data)
+    try {
+        request.post(options, (err, response, body) => {
+            if (err) {
+                return console.log(err);
+            }
+            console.log(`Status: ${response.statusCode}`);
+            console.log(body);
+            return res.status(response.statusCode).send(body)
+        });
+    } catch (err) {
+        return next(err)
+    }
+};

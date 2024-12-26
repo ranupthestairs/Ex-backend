@@ -13,7 +13,7 @@ export const generateMastercardAuthHeader = (
     return authHeader;
 }
 
-export const generateVisaAuthHeader = (addUrl) => {
+export const generateVisaAuthHeader = (addUrl, data = {}) => {
     const url = VISA_BASEURL + addUrl;
 
     var options = {
@@ -29,7 +29,8 @@ export const generateVisaAuthHeader = (addUrl) => {
             'Authorization': 'Basic ' + Buffer.from(VISA_USER_ID + ':' + VISA_PASSWORD).toString('base64')
         },
         json: true,
-        agent: {}
+        agent: {},
+        body: data
     };
     options.agent = new https.Agent(options);
 
